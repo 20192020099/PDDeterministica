@@ -1,0 +1,57 @@
+import sys
+
+#datos
+matrizAdy = [[0, 7, 8, 5, 0, 0, 0],  
+             [7, 0, 0, 0, 12, 0, 0], 
+             [8, 0, 0, 0, 8, 9, 0],  
+             [5, 0, 0, 0, 7, 13, 0],  
+             [0, 12, 8, 0, 0, 0, 9],  
+             [0, 0, 9, 13, 0, 0, 6],  
+             [0, 0, 0, 0, 0, 9, 6]]  
+
+inicio, destino = 1,7
+inicio-=1
+destino-1
+
+NO_PARENT = -1
+camino = []  # nodos en el camino mas corto
+lista_mas_corto = []  # lista de la distancia mas corta
+
+
+def Busqueda(matrizAdy, vFuente, dest):
+  n = len(matrizAdy[0])
+  caminoMasCorto =[]  # guarda los caminos mas cortos
+  visitado = []
+  anterior = []  # guarda los vertices anteriores del camino mas corto
+  for v in range(0, n, 1):
+        caminoMasCorto.append(sys.maxsize)
+        visitado.append(False)
+        caminoMasCorto.append(0)
+        anterior.append(NO_PARENT)
+        for i in range(1, n, 1):
+            pre = -1
+            min = sys.maxsize;
+            for v in range(0, n, 1):
+              if visitado == False and caminoMasCorto < min:
+                pre = v
+                min = caminoMasCorto[v];
+            if pre == -1:
+                return
+            visitado[pre] = True
+            for v in range(0, n, 1):
+                dist = matrizAdy[pre][v]
+                if dist > 0 and ((min + dist) < caminoMasCorto[v]):
+                    anterior[v] = pre
+                    caminoMasCorto[v] = min + dist
+        lista_mas_corto.append(caminoMasCorto[dest])
+        agregarCamino(destino, anterior)
+print(lista_mas_corto)
+
+def agregarCamino(i, anterior):
+  if i == NO_PARENT:
+    return
+  agregarCamino(anterior[i], anterior)
+  camino.append(i)
+
+Camino = Busqueda(matrizAdy, inicio, destino)
+#print("Camino mas corto: ", lista_mas_corto[0])
